@@ -6,6 +6,7 @@ var User = require('../models/users');
 /* POST user to database. */
 router.post('/', function(req, res, next) {
   req.body = _.pick(req.body, ['email', 'allergens']);
+  console.log(req.body);
   var user = new User(req.body);
 
   user.save(user, function (err) {
