@@ -5,9 +5,7 @@ var User = require('../models/users');
 
 /* POST user to database. */
 router.post('/', function(req, res, next) {
-  console.log(req.body);
   req.body = _.pick(req.body, ['email', 'allergens']);
-  console.log(req.body);
   var user = new User(req.body);
 
   user.save(user, function (err) {
@@ -20,7 +18,8 @@ router.post('/', function(req, res, next) {
 });
 
 /* DELETE user from database */
-router.delete('/', function (req, res, next) {
+router.delete('/:Id', function (req, res, next) {
+  console.log(req.params.Id);
   User.findById(req.params.Id, function (err, user) {
     if (err) {
       res.status(500).send();
