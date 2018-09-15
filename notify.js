@@ -5,8 +5,8 @@ var axios = require('axios');
 var _ = require('underscore');
 var User = require('./models/users');
 
-mongoose.connect(process.env.DB_CONNECTION);
 console.log(process.env.DB_CONNECTION);
+mongoose.connect(process.env.DB_CONNECTION);
 
 var db = mongoose.connection;
 db.on('connected', function () {
