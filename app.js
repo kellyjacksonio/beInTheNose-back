@@ -7,12 +7,22 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var bson = require('bson');
-// mongoose.connect(process.env.DB_CONNECTION)
+var cors = require('cors');
+
+// Mongoose connection
+mongoose.connect(process.env.DB_CONNECTION);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+// CORS configuration
+var corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,7 +70,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(3000, (req,res) => {
+app.listen(4200, (req,res) => {
   console.log('running !')
 });
 
