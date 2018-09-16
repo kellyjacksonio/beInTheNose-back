@@ -1,4 +1,4 @@
-var dotenv = require('dotenv').config({silent: true})
+require('dotenv').config({silent: true})
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,14 +8,18 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var bson = require('bson');
 var cors = require('cors');
+var notify = require('./notify');
+var exphbs  = require('express-handlebars');
+var app = express();
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 // Mongoose connection
 mongoose.connect(process.env.DB_CONNECTION);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-var app = express();
 
 // CORS configuration
 var corsOptions = {
@@ -24,9 +28,6 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -74,5 +75,4 @@ app.listen(3000, (req,res) => {
   console.log('running !')
 });
 
-
-module.exports = app;
+notify();
