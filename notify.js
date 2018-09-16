@@ -2,7 +2,7 @@ require('dotenv').config({silent: true});
 
 var mongoose = require('mongoose');
 var axios = require('axios');
-var _ = require('underscore');
+var _ = require('lodash');
 var User = require('./models/users');
 var hbs = require('nodemailer-express-handlebars');
 var nodemailer = require('nodemailer');
@@ -21,7 +21,20 @@ var notify = function() {
       if(err) {
         console.log(err);
       } else {
-        var highAllergens = ['mold', 'tree', 'grass', 'ragweed'];
+        if(err) {
+          console.log(err);
+        } else {
+          axios.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/351193?apikey=qSOlHuy0vvmhUQXyFnc91Q1uv8o4cGcg&details=true')
+            .then(function (res) {
+              var todayAllergens= res.data['DailyForecasts'][0]['AirAndPollen'];
+    
+              var highAllergens = [];
+              todayAllergens.forEach(function (allergen) {
+                if (allergen['Category'] == 'High' || allergen['Category'] == 'Unhealthy' || allergen['Category'] == 'Hazardous') {
+                  highAllergens.push(_.toLower(allergen['Name']));
+                };
+              });
+    
         for (var i = 0; i < users.length; i++) {
           user = users[i];
           var allergyIntersect = _.intersection(highAllergens, user.allergens);
@@ -70,8 +83,7 @@ var notify = function() {
           }
         }
       }
-    })
-  })
-}
+    });
+
 
 module.exports = notify;
